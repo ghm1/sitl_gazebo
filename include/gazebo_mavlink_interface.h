@@ -79,6 +79,7 @@ static const std::string kDefaultLidarTopic = "lidar";
 static const std::string kDefaultOpticalFlowTopic = "opticalFlow";
 static const std::string kDefaultMavlinkHilSensorPubTopic = "HilSensor";
 static const std::string kDefaultMavlinkHilGpsPubTopic = "HilGps";
+//add additional proto message ids here
 
 static bool use_mavlink_udp = true;
 
