@@ -1,0 +1,121 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+<model name="my_model">
+  <pose>2 2 0.5 0 0 0</pose>
+  <static>true</static>
+    <link name="link">
+
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.82 0.55 1</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.82 0.55 1</size>
+          </box>
+        </geometry>
+      </visual> 
+
+      <visual name='middle_pt_visual'>
+        <pose frame=''>0 0 0.50 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <shader type='pixel'>
+            <normal_map>__default__</normal_map>
+          </shader>
+          <ambient>1 0 0 0</ambient>
+          <diffuse>1 0 0 0</diffuse>
+          <specular>1 0 0 0</specular>
+          <emissive>1 0 0 0</emissive>
+          <script>
+            <name>ModelPreview_1::link::left_pt_visual_MATERIAL_</name>
+          </script>
+        </material>
+        <cast_shadows>1</cast_shadows>
+        <transparency>0</transparency>
+      </visual>
+
+      <visual name='right_pt_visual'>
+        <pose frame=''>0.25 0 0.50 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <shader type='pixel'>
+            <normal_map>__default__</normal_map>
+          </shader>
+          <ambient>1 0 0 0</ambient>
+          <diffuse>1 0 0 0</diffuse>
+          <specular>1 0 0 0</specular>
+          <emissive>1 0 0 0</emissive>
+          <script>
+            <name>ModelPreview_1::link::left_pt_visual_MATERIAL_</name>
+          </script>
+        </material>
+        <cast_shadows>1</cast_shadows>
+        <transparency>0</transparency>
+      </visual>
+
+      <visual name='left_pt_visual'>
+        <pose frame=''>-0.25 0 0.50 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <shader type='pixel'>
+            <normal_map>__default__</normal_map>
+          </shader>
+          <ambient>1 0 0 0</ambient>
+          <diffuse>1 0 0 0</diffuse>
+          <specular>1 0 0 0</specular>
+          <emissive>1 0 0 0</emissive>
+          <script>
+            <name>ModelPreview_1::link::left_pt_visual_MATERIAL_</name>
+          </script>
+        </material>
+        <cast_shadows>1</cast_shadows>
+        <transparency>0</transparency>
+      </visual>
+
+      <visual name='front_pt_visual'>
+        <pose frame=''>0 0.25 0.50 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.02</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <shader type='pixel'>
+            <normal_map>__default__</normal_map>
+          </shader>
+          <ambient>1 0 0 0</ambient>
+          <diffuse>1 0 0 0</diffuse>
+          <specular>1 0 0 0</specular>
+          <emissive>1 0 0 0</emissive>
+          <script>
+            <name>ModelPreview_1::link::left_pt_visual_MATERIAL_</name>
+          </script>
+        </material>
+        <cast_shadows>1</cast_shadows>
+        <transparency>0</transparency>
+      </visual>
+
+    </link>
+  </model>
+</sdf>
