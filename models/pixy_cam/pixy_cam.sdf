@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
   <model name="pixy_camera">
-    <pose>0.0 0.0 0.0 0 0 0</pose>
-    <static>false</static>
+    <pose>1.0 -2.0 3.0 0 1.57 0</pose>
+    <static>true</static>
     <link name="platine">
       <inertial>
         <mass>0.01</mass>
@@ -77,11 +77,11 @@
             <far>100</far>
           </clip>
 
-          <noise>
+        <!--  <noise>
             <type>gaussian</type>
             <mean>0.0</mean>
             <stddev>0.0</stddev>
-          </noise>
+          </noise> -->
 
         </camera>
         <plugin name="PixyCameraPlugin" filename="libgazebo_pixy_cam_plugin.so"/>

@@ -126,7 +126,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
   {
       std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
-      std::string origImgName = dir + std::string("orig") + to_string(imgCounter) + std::string(".png");
+      std::string origImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
       std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
       std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
       try {
@@ -136,14 +136,22 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
 
           imwrite(origImgName, frame, compression_params);
 
-          Mat channel[3];
+          //convert to gray
+          cv::Mat imageInputGray;
+          cvtColor(frame,imageInputGray,cv::COLOR_BGR2GRAY);
+          imwrite(origImgName, imageInputGray, compression_params);
+
+          //Mat channel[3];
           // The actual splitting.
-          split(frame, channel);
+          //split(frame, channel);
+          //imwrite(channelImgName, channel[2], compression_params);
 
           //thresholding
           cv::Mat imageThresh;
-          cv::adaptiveThreshold(channel[0], imageThresh, 255,
-                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
+          double thres = 60;
+          cv::threshold(imageInputGray, imageThresh, thres, 255, cv::THRESH_BINARY_INV);
+//          cv::adaptiveThreshold(channel[0], imageThresh, 255,
+//                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
 
           //save thesholded image
           imwrite(thresImgName, imageThresh, compression_params);
@@ -174,9 +182,9 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
           for( size_t i = 0; i< contours.size(); i++ )
           {
             Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-            drawContours( drawing, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+            //drawContours( drawing, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
             rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
-            circle( drawing, center[i], (int)radius[i], color, 2, 8, 0 );
+            //circle( drawing, center[i], (int)radius[i], color, 2, 8, 0 );
           }
 
           //save resulting image
