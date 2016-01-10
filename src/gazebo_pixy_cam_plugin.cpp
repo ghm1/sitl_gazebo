@@ -132,14 +132,14 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   //check time
   if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 1 )
   {
-      std::string imgName = std::string("pixyimg") + to_string(imgCounter) + std::string(".png");
+      std::string imgName = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/pixyimg") + to_string(imgCounter) + std::string(".png");
 
       try {
-          printf("saving img: ");
-          printf(imgName.c_str());
-          printf("\n");
+          printf("saving img.. \n");
+          //printf(imgName.c_str());
+          //printf("\n");
 
-          //imwrite(imgName, frame, compression_params);
+          imwrite(imgName, frame, compression_params);
           imgCounter++;
           //reset timer
           lastTimeImg = std::clock();
