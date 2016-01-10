@@ -21,7 +21,7 @@
 #endif
 
 #include "gazebo/sensors/DepthCameraSensor.hh"
-#include "gazebo_opticalFlow_plugin.h"
+#include "gazebo_pixy_cam_plugin.h"
 
 #include <cv.h>
 #include <highgui.h>
@@ -82,11 +82,11 @@ void PixyCameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("robotNamespace"))
     namespace_ = _sdf->GetElement("robotNamespace")->Get<std::string>();
   else
-    gzwarn << "[gazebo_optical_flow_plugin] Please specify a robotNamespace.\n";
+    gzwarn << "[gazebo_pixy_cam_plugin] Please specify a robotNamespace.\n";
 
   node_handle_ = transport::NodePtr(new transport::Node());
   node_handle_->Init(namespace_);
-  opticalFlow_pub_ = node_handle_->Advertise<opticalFlow_msgs::msgs::opticalFlow>(topicName, 10);
+ // opticalFlow_pub_ = node_handle_->Advertise<opticalFlow_msgs::msgs::opticalFlow>(topicName, 10);
 
 
 
@@ -105,15 +105,19 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
 {
   _image = this->camera->GetImageData(0);
   //GetHFOV gives fucking gazebo::math::Angle which you can not cast...
-  const double Hfov = 0.6;
+  const double Hfov = 0.91;
   const double focal_length = (_width/2)/tan(Hfov/2);
 
-  double pixel_flow_x_integral = 0.0;
-  double pixel_flow_y_integral = 0.0;
+  //double pixel_flow_x_integral = 0.0;
+  //double pixel_flow_y_integral = 0.0;
   double rate = this->camera->GetRenderRate();
-  if (!isfinite(rate))
-	   rate =  30.0;
-  double dt = 1.0 / rate;
+  if (!isfinite(rate)) {
+	   rate =  10.0;
+  }
+
+  printf("image received: width %d, height %d",_width, _height );
+
+  /*double dt = 1.0 / rate;
 
 
   Mat frame = Mat(_height, _width, CV_8UC3);
@@ -131,7 +135,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   }
 
   /*/// Set the needed parameters to find the refined corners
-  Size winSize = Size( 5, 5 );
+/*  Size winSize = Size( 5, 5 );
   Size zeroZone = Size( -1, -1 );
   TermCriteria criteria = TermCriteria( CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 40, 0.001 );
 
@@ -140,7 +144,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   cornerSubPix(old_gray, featuresPrevious, winSize, zeroZone, criteria);*/
 
   //calc diff
-  int meancount = 0;
+/*  int meancount = 0;
   for (int i = 0; i < featuresNextPos.size(); i++) {
 
     if (featuresFound[i] == true) {
@@ -170,6 +174,6 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   opticalFlow_message.set_time_delta_distance_us(0.0);
   opticalFlow_message.set_distance(0.0); //get real values in gazebo_mavlink_interface.cpp
 
-  opticalFlow_pub_->Publish(opticalFlow_message);
+  opticalFlow_pub_->Publish(opticalFlow_message);*/
 
 }

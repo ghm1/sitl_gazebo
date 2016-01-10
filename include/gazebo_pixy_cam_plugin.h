@@ -71,7 +71,7 @@ namespace gazebo
 
 	transport::PublisherPtr opticalFlow_pub_;
 	transport::NodePtr node_handle_;
-	opticalFlow_msgs::msgs::opticalFlow opticalFlow_message;
+	//opticalFlow_msgs::msgs::opticalFlow opticalFlow_message;
 	std::string namespace_;
 	const string topicName = "opticalFlow";
 
