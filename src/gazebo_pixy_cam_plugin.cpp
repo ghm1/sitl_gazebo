@@ -130,7 +130,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   compression_params.push_back(9);
 
   //check time
-  if( (lastTimeImg - std::clock()) / (double) CLOCKS_PER_SEC > 1 )
+  if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 1 )
   {
       std::string imgName = std::string("pixyimg") + to_string(imgCounter) + std::string(".png");
 
