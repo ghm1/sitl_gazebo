@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
   <model name="pixy_camera">
-    <pose>0.0 0.0 1.0 0 0 0</pose>
+    <pose>0.0 0.0 0.0 0 0 0</pose>
     <static>false</static>
     <link name="platine">
       <inertial>
@@ -65,11 +65,11 @@
 
   	  <sensor name="pixy" type="camera">
         <camera>
-          <horizontal_fov>0.6</horizontal_fov>
+          <horizontal_fov>0.9136</horizontal_fov>
 
           <image>
-            <width>64</width>
-            <height>64</height>
+            <width>318</width>
+            <height>198</height>
           </image>
 
           <clip>
@@ -80,7 +80,7 @@
           <noise>
             <type>gaussian</type>
             <mean>0.0</mean>
-            <stddev>0.005</stddev>
+            <stddev>0.001</stddev>
           </noise>
 
         </camera>

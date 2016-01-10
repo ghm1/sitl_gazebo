@@ -498,7 +498,7 @@
       <child>pixy_camera::platine</child>
       <parent>base_link</parent>
       <axis>
-        <xyz>0 0 1</xyz>
+        <xyz>0 0 0</xyz>
         <limit>
           <upper>0</upper>
           <lower>0</lower>
