@@ -109,17 +109,10 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   const double Hfov = 0.91;
   const double focal_length = (_width/2)/tan(Hfov/2);
 
-  //double pixel_flow_x_integral = 0.0;
-  //double pixel_flow_y_integral = 0.0;
   double rate = this->camera->GetRenderRate();
   if (!isfinite(rate)) {
 	   rate =  10.0;
   }
-
-  //printf("image received: width %d, height %d",_width, _height );
-
-  //double dt = 1.0 / rate;
-
 
   Mat frame = Mat(_height, _width, CV_8UC3);
   //Mat frameBGR = Mat(_height, _width, CV_8UC3);
@@ -130,16 +123,65 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   compression_params.push_back(9);
 
   //check time
-  if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 1 )
+  if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
   {
-      std::string imgName = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/pixyimg") + to_string(imgCounter) + std::string(".png");
-
+      std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
+      std::string origImgName = dir + std::string("orig") + to_string(imgCounter) + std::string(".png");
+      std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
+      std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
       try {
           printf("saving img.. \n");
           //printf(imgName.c_str());
           //printf("\n");
 
-          imwrite(imgName, frame, compression_params);
+          imwrite(origImgName, frame, compression_params);
+
+          Mat channel[3];
+          // The actual splitting.
+          split(frame, channel);
+
+          //thresholding
+          cv::Mat imageThresh;
+          cv::adaptiveThreshold(channel[0], imageThresh, 255,
+                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
+
+          //save thesholded image
+          imwrite(thresImgName, imageThresh, compression_params);
+
+          //remove noise?
+
+          //contourfinder
+          std::vector<std::vector<cv::Point>> contours;
+          std::vector<cv::Vec4i> hierarchy;
+          cv::findContours(imageThresh, contours, hierarchy,
+                           cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE);
+
+          //find bounding rectangles of contours
+          vector<vector<Point> > contours_poly( contours.size() );
+          vector<Rect> boundRect( contours.size() );
+          vector<Point2f>center( contours.size() );
+          vector<float>radius( contours.size() );
+          for( size_t i = 0; i < contours.size(); i++ )
+          {
+            approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
+            boundRect[i] = boundingRect( Mat(contours_poly[i]) );
+            minEnclosingCircle( contours_poly[i], center[i], radius[i] );
+          }
+
+          //draw rectangles into image
+          RNG rng(12345);
+          Mat drawing = Mat::zeros( imageThresh.size(), CV_8UC3 );
+          for( size_t i = 0; i< contours.size(); i++ )
+          {
+            Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+            drawContours( drawing, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+            rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
+            circle( drawing, center[i], (int)radius[i], color, 2, 8, 0 );
+          }
+
+          //save resulting image
+          imwrite(resultImgName, drawing, compression_params);
+
           imgCounter++;
           //reset timer
           lastTimeImg = std::clock();
@@ -150,44 +192,8 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
       }
   }
 
-  //Mat channel[3];
-  // The actual splitting.
-  //split(frame, channel);
 
-  //cvtColor(frame, frameBGR, CV_RGB2BGR);
-  //cvtColor(frameBGR, frame_gray, CV_BGR2GRAY);
-  
-  /* featuresPrevious = featuresCurrent;
-
-  goodFeaturesToTrack(frame_gray, featuresCurrent, maxfeatures, qualityLevel, minDistance, Mat(), blockSize, useHarrisDetector, k); //calculate the features
-
-  if (!old_gray.empty() && featuresPrevious.size() > 0){
-    calcOpticalFlowPyrLK(old_gray, frame_gray, featuresPrevious, featuresNextPos, featuresFound, err);
-  }
-
-  /*/// Set the needed parameters to find the refined corners
-/*  Size winSize = Size( 5, 5 );
-  Size zeroZone = Size( -1, -1 );
-  TermCriteria criteria = TermCriteria( CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 40, 0.001 );
-
-  // Calculate the refined corner locations
-  cornerSubPix(frame_gray, featuresNextPos, winSize, zeroZone, criteria);
-  cornerSubPix(old_gray, featuresPrevious, winSize, zeroZone, criteria);*/
-
-  //calc diff
-/*  int meancount = 0;
-  for (int i = 0; i < featuresNextPos.size(); i++) {
-
-    if (featuresFound[i] == true) {
-     	pixel_flow_x_integral += featuresNextPos[i].x - featuresPrevious[i].x;
-      pixel_flow_y_integral += featuresNextPos[i].y - featuresPrevious[i].y;
-      meancount++;
-	  }	 	
-  }
-
-  double flow_x_ang = atan2(pixel_flow_x_integral/meancount, focal_length);
-  double flow_y_ang = atan2(pixel_flow_y_integral/meancount, focal_length);
-
+/*
   old_gray = frame_gray.clone();
 
   //std::cout << "pixel flow x = " << pixel_flow_x_integral << "   pixel flow y = " << pixel_flow_y_integral << endl;
@@ -205,6 +211,6 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   opticalFlow_message.set_time_delta_distance_us(0.0);
   opticalFlow_message.set_distance(0.0); //get real values in gazebo_mavlink_interface.cpp
 
-  opticalFlow_pub_->Publish(opticalFlow_message);*/
+  opticalFlow_pub_->Publish(opticalFlow_message); */
 
 }
