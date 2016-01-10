@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <model name="pixy_camera">
+    <pose>0.0 0.0 1.0 0 0 0</pose>
+    <static>false</static>
+    <link name="platine">
+      <inertial>
+        <mass>0.01</mass>
+        <inertia>
+          <ixx>4.15e-6</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>2.407e-6</iyy>
+          <iyz>0</iyz>
+          <izz>2.407e-6</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name='platine'>
+        <geometry>
+          <box>
+            <size>0.05 0.05 0.005</size>
+          </box> 
+        </geometry>
+        <material>
+          <shader type='pixel'>
+            <normal_map>__default__</normal_map>
+          </shader>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>0 1 0 0</diffuse>
+          <specular>0 1 0 0</specular>
+          <emissive>0 1 0 0</emissive>
+          <script>
+            <name>ModelPreview_1::platine::platine_MATERIAL_</name>
+          </script>
+        </material>
+        <pose frame=''>0 0 0 0 1.57079 0</pose>
+        <cast_shadows>1</cast_shadows>
+        <transparency>0</transparency>
+      </visual>
+
+      <visual name='lens'>
+        <pose frame=''>0.0075 0 0 0 1.57079 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.007</radius>
+            <length>0.015</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <shader type='pixel'>
+            <normal_map>__default__</normal_map>
+          </shader>
+          <ambient>1 0 0 0</ambient>
+          <diffuse>1 0 0 0</diffuse>
+          <specular>1 0 0 0</specular>
+          <emissive>1 0 0 0</emissive>
+          <script>
+            <name>ModelPreview_1::link::left_pt_visual_MATERIAL_</name>
+          </script>
+        </material>
+        <cast_shadows>1</cast_shadows>
+        <transparency>0</transparency>
+      </visual>
+
+  	  <sensor name="pixy" type="camera">
+        <camera>
+          <horizontal_fov>0.6</horizontal_fov>
+
+          <image>
+            <width>64</width>
+            <height>64</height>
+          </image>
+
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+
+        </camera>
+        <!--<plugin name="CameraPlugin" filename="libgazebo_opticalFlow_plugin.so"/> -->
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <visualize>1</visualize>
+      </sensor>
+
+    </link>
+  </model>
+</sdf>

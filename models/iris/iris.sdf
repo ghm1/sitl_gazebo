@@ -1,7 +1,10 @@
-<sdf version='1.5'>
+<?xml version="1.0" ?>
+<sdf version="1.4">
   <model name='iris'>
+
     <link name='base_link'>
       <pose>0 0 0 0 -0 0</pose>
+
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>1.5</mass>
@@ -14,6 +17,7 @@
           <izz>0.0977</izz>
         </inertia>
       </inertial>
+
       <collision name='base_link_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -30,6 +34,7 @@
           </friction>
         </surface>
       </collision>
+
       <visual name='base_link_visual'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -45,10 +50,13 @@
           </script>
         </material>
       </visual>
+
       <gravity>1</gravity>
       <velocity_decay/>
       <self_collide>0</self_collide>
     </link>
+
+
     <link name='iris/imu_link'>
       <pose>0 0 0 0 -0 0</pose>
       <inertial>
@@ -64,6 +72,8 @@
         </inertia>
       </inertial>
     </link>
+
+
     <joint name='iris/imu_joint' type='revolute'>
       <child>iris/imu_link</child>
       <parent>base_link</parent>
@@ -82,8 +92,11 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
+
+
     <link name='rotor_0'>
       <pose>0.13 -0.22 0.023 0 -0 0</pose>
+
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -96,6 +109,7 @@
           <izz>0.000167604</izz>
         </inertia>
       </inertial>
+
       <collision name='rotor_0_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -113,6 +127,7 @@
           </friction>
         </surface>
       </collision>
+
       <visual name='rotor_0_visual'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -128,10 +143,13 @@
           </script>
         </material>
       </visual>
+
       <gravity>1</gravity>
       <velocity_decay/>
       <self_collide>0</self_collide>
     </link>
+
+
     <joint name='rotor_0_joint' type='revolute'>
       <child>rotor_0</child>
       <parent>base_link</parent>
@@ -148,8 +166,11 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
+
+
     <link name='rotor_1'>
       <pose>-0.13 0.2 0.023 0 -0 0</pose>
+
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -162,6 +183,7 @@
           <izz>0.000167604</izz>
         </inertia>
       </inertial>
+
       <collision name='rotor_1_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -179,6 +201,7 @@
           </friction>
         </surface>
       </collision>
+
       <visual name='rotor_1_visual'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -194,10 +217,13 @@
           </script>
         </material>
       </visual>
+
       <gravity>1</gravity>
       <velocity_decay/>
       <self_collide>0</self_collide>
     </link>
+
+
     <joint name='rotor_1_joint' type='revolute'>
       <child>rotor_1</child>
       <parent>base_link</parent>
@@ -214,8 +240,11 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
+
+
     <link name='rotor_2'>
       <pose>0.13 0.22 0.023 0 -0 0</pose>
+
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -228,6 +257,7 @@
           <izz>0.000167604</izz>
         </inertia>
       </inertial>
+
       <collision name='rotor_2_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -245,6 +275,7 @@
           </friction>
         </surface>
       </collision>
+
       <visual name='rotor_2_visual'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -260,10 +291,13 @@
           </script>
         </material>
       </visual>
+
       <gravity>1</gravity>
       <velocity_decay/>
       <self_collide>0</self_collide>
     </link>
+
+
     <joint name='rotor_2_joint' type='revolute'>
       <child>rotor_2</child>
       <parent>base_link</parent>
@@ -280,8 +314,11 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
+
+
     <link name='rotor_3'>
       <pose>-0.13 -0.2 0.023 0 -0 0</pose>
+
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.005</mass>
@@ -294,6 +331,7 @@
           <izz>0.000167604</izz>
         </inertia>
       </inertial>
+
       <collision name='rotor_3_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -311,6 +349,7 @@
           </friction>
         </surface>
       </collision>
+
       <visual name='rotor_3_visual'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
@@ -326,10 +365,13 @@
           </script>
         </material>
       </visual>
+
       <gravity>1</gravity>
       <velocity_decay/>
       <self_collide>0</self_collide>
     </link>
+
+
     <joint name='rotor_3_joint' type='revolute'>
       <child>rotor_3</child>
       <parent>base_link</parent>
@@ -346,11 +388,14 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
+
+
     <plugin name='rosbag' filename='librotors_gazebo_multirotor_base_plugin.so'>
       <robotNamespace>iris</robotNamespace>
       <linkName>base_link</linkName>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
+
     <plugin name='front_right_motor_model' filename='librotors_gazebo_motor_model.so'>
       <robotNamespace>iris</robotNamespace>
       <jointName>rotor_0_joint</jointName>
@@ -368,6 +413,7 @@
       <motorSpeedPubTopic>motor_speed/0</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
+
     <plugin name='back_left_motor_model' filename='librotors_gazebo_motor_model.so'>
       <robotNamespace>iris</robotNamespace>
       <jointName>rotor_1_joint</jointName>
@@ -385,6 +431,7 @@
       <motorSpeedPubTopic>motor_speed/1</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
+
     <plugin name='front_left_motor_model' filename='librotors_gazebo_motor_model.so'>
       <robotNamespace>iris</robotNamespace>
       <jointName>rotor_2_joint</jointName>
@@ -402,6 +449,7 @@
       <motorSpeedPubTopic>motor_speed/2</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
+
     <plugin name='back_right_motor_model' filename='librotors_gazebo_motor_model.so'>
       <robotNamespace>iris</robotNamespace>
       <jointName>rotor_3_joint</jointName>
@@ -419,12 +467,15 @@
       <motorSpeedPubTopic>motor_speed/3</motorSpeedPubTopic>
       <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
     </plugin>
+
     <plugin name='mavlink_interface' filename='librotors_gazebo_mavlink_interface.so'>
       <robotNamespace>iris</robotNamespace>
       <imuSubTopic>imu</imuSubTopic>
       <motorSpeedCommandPubTopic>gazebo/command/motor_speed</motorSpeedCommandPubTopic>
     </plugin>
+
     <static>0</static>
+    
     <plugin name='rotors_gazebo_imu_plugin' filename='librotors_gazebo_imu_plugin.so'>
       <robotNamespace>iris</robotNamespace>
       <linkName>iris/imu_link</linkName>
@@ -438,5 +489,22 @@
       <accelerometerBiasCorrelationTime>300.0</accelerometerBiasCorrelationTime>
       <accelerometerTurnOnBiasSigma>0.196</accelerometerTurnOnBiasSigma>
     </plugin>
+
+    <include>
+      <uri>model://pixy_cam</uri>
+      <pose>0 0 -0.05 0 1.57079 0</pose>
+    </include>
+    <joint name="pixy_camera_joint" type="revolute">
+      <child>pixy_camera::platine</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+        </limit>
+      </axis>
+    </joint> 
+
   </model>
 </sdf>

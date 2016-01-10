@@ -12,5 +12,10 @@
     <include>
       <uri>model://iris</uri>
     </include>
+
+    <include>
+      <uri>model://land_target</uri>
+    </include>
+
   </world>
 </sdf>
