@@ -130,7 +130,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
       std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
       std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
       try {
-          printf("saving img.. \n");
+          //printf("saving img.. \n");
           //printf(imgName.c_str());
           //printf("\n");
 
