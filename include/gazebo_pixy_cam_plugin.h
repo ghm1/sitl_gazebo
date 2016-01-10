@@ -32,6 +32,9 @@
 
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include <cstdio>
+#include <ctime>
+
 
 using namespace cv;
 using namespace std;
@@ -82,6 +85,10 @@ namespace gazebo
 	const bool useHarrisDetector = false;
 	const double k = 0.04;
 
+        //save image
+        int imgCounter;
+        double duration;
+        std::clock_t lastTimeImg;
   };
 }
 #endif

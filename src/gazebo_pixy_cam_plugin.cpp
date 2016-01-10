@@ -29,7 +29,6 @@
 #include <string>
 #include <iostream>
 
-
 using namespace cv;
 using namespace std;
 
@@ -38,8 +37,10 @@ GZ_REGISTER_SENSOR_PLUGIN(PixyCameraPlugin)
 
 /////////////////////////////////////////////////
 PixyCameraPlugin::PixyCameraPlugin()
-: SensorPlugin(), width(0), height(0), depth(0)
+: SensorPlugin(), width(0), height(0), depth(0),
+  imgCounter(0)
 {
+    lastTimeImg = std::clock();
 }
 
 /////////////////////////////////////////////////
@@ -115,18 +116,48 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
 	   rate =  10.0;
   }
 
-  printf("image received: width %d, height %d",_width, _height );
+  //printf("image received: width %d, height %d",_width, _height );
 
-  /*double dt = 1.0 / rate;
+  //double dt = 1.0 / rate;
 
 
   Mat frame = Mat(_height, _width, CV_8UC3);
-  Mat frameBGR = Mat(_height, _width, CV_8UC3);
+  //Mat frameBGR = Mat(_height, _width, CV_8UC3);
   frame.data = (uchar*)_image; //frame is not the right color now -> convert
-  cvtColor(frame, frameBGR, CV_RGB2BGR); 
-  cvtColor(frameBGR, frame_gray, CV_BGR2GRAY);
+
+  vector<int> compression_params;
+  compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
+  compression_params.push_back(9);
+
+  //check time
+  if( (lastTimeImg - std::clock()) / (double) CLOCKS_PER_SEC > 1 )
+  {
+      std::string imgName = std::string("pixyimg") + to_string(imgCounter) + std::string(".png");
+
+      try {
+          printf("saving img: ");
+          printf(imgName.c_str());
+          printf("\n");
+
+          //imwrite(imgName, frame, compression_params);
+          imgCounter++;
+          //reset timer
+          lastTimeImg = std::clock();
+      }
+      catch (runtime_error& ex) {
+          fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
+          return;
+      }
+  }
+
+  //Mat channel[3];
+  // The actual splitting.
+  //split(frame, channel);
+
+  //cvtColor(frame, frameBGR, CV_RGB2BGR);
+  //cvtColor(frameBGR, frame_gray, CV_BGR2GRAY);
   
-  featuresPrevious = featuresCurrent;
+  /* featuresPrevious = featuresCurrent;
 
   goodFeaturesToTrack(frame_gray, featuresCurrent, maxfeatures, qualityLevel, minDistance, Mat(), blockSize, useHarrisDetector, k); //calculate the features
 
