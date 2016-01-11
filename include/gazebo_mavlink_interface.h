@@ -36,6 +36,7 @@
 #include "HilControl.pb.h"
 #include "HilSensor.pb.h"
 #include "HilGps.pb.h"
+#include "PixyCamPts.pb.h"
 #include <boost/bind.hpp>
 
 #include <iostream>
@@ -61,6 +62,8 @@ typedef const boost::shared_ptr<const mavlink::msgs::HilControl>   HilControlPtr
 typedef const boost::shared_ptr<const mavlink::msgs::HilSensor>   HilSensorPtr;
 typedef const boost::shared_ptr<const mavlink::msgs::HilGps>   HilGpsPtr;
 typedef const boost::shared_ptr<const sensor_msgs::msgs::Imu> ImuPtr;
+//pixy message
+typedef const boost::shared_ptr<const mav_msgs::msgs::PixyCamPts> PixyCamPtsPtr;
 
 // Default values
 static const std::string kDefaultNamespace = "";
@@ -71,6 +74,7 @@ static const std::string kDefaultMotorVelocityReferencePubTopic = "gazebo/comman
 static const std::string kDefaultMavlinkControlSubTopic = "HilControl";
 
 static const std::string kDefaultImuTopic = "imu";
+static const std::string kDefaultPixyCamPts = "PixyCamPts";
 static const std::string kDefaultMavlinkHilSensorPubTopic = "HilSensor";
 static const std::string kDefaultMavlinkHilGpsPubTopic = "HilGps";
 
@@ -86,7 +90,8 @@ class GazeboMavlinkInterface : public ModelPlugin {
         hil_sensor_mavlink_pub_topic_(kDefaultMavlinkHilSensorPubTopic),
         hil_gps_mavlink_pub_topic_(kDefaultMavlinkHilGpsPubTopic),
         imu_sub_topic_(kDefaultImuTopic),
-        mavlink_control_sub_topic_(kDefaultMavlinkControlSubTopic) {}
+        mavlink_control_sub_topic_(kDefaultMavlinkControlSubTopic),
+        pixyCamPts_sub_topic_(kDefaultPixyCamPts) {}
   ~GazeboMavlinkInterface();
 
   void Publish();
@@ -122,6 +127,7 @@ class GazeboMavlinkInterface : public ModelPlugin {
   void QueueThread();
   void HilControlCallback(HilControlPtr &rmsg);
   void ImuCallback(ImuPtr& imu_msg);
+  void PixyCamPtsCallback( PixyCamPtsPtr& pixyCamPts_message );
   void send_mavlink_message(const uint8_t msgid, const void *msg, uint8_t component_ID);
   void handle_message(mavlink_message_t *msg);
   void pollForMAVLinkMessages();
@@ -132,6 +138,7 @@ class GazeboMavlinkInterface : public ModelPlugin {
   } inputs; 
 
   transport::SubscriberPtr imu_sub_;
+  transport::SubscriberPtr pixyCamPts_sub_;
   transport::PublisherPtr hil_sensor_pub_;
   transport::PublisherPtr hil_gps_pub_;
 
@@ -141,6 +148,7 @@ class GazeboMavlinkInterface : public ModelPlugin {
   std::string left_elevon_joint_name_;
   std::string right_elevon_joint_name_;
   std::string elevator_joint_name_;
+  std::string pixyCamPts_sub_topic_;
   
   common::Time last_time_;
   common::Time last_gps_time_;

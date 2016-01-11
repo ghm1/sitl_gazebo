@@ -77,7 +77,9 @@ void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
   // Subscriber to IMU sensor_msgs::Imu Message and SITL's HilControl message
   mav_control_sub_ = node_handle_->Subscribe(mavlink_control_sub_topic_, &GazeboMavlinkInterface::HilControlCallback, this);
   imu_sub_ = node_handle_->Subscribe(imu_sub_topic_, &GazeboMavlinkInterface::ImuCallback, this);
-  
+  // ghm1: subscribe to pixy camera points
+  pixyCamPts_sub_ = node_handle_->Subscribe(pixyCamPts_sub_topic_, &GazeboMavlinkInterface::PixyCamPtsCallback, this);
+
   // Publish HilSensor Message and gazebo's motor_speed message
   motor_velocity_reference_pub_ = node_handle_->Advertise<mav_msgs::msgs::CommandMotorSpeed>(motor_velocity_reference_pub_topic_, 1);
   hil_sensor_pub_ = node_handle_->Advertise<mavlink::msgs::HilSensor>(hil_sensor_mavlink_pub_topic_, 1);
@@ -290,6 +292,10 @@ void GazeboMavlinkInterface::send_mavlink_message(const uint8_t msgid, const voi
   if (len <= 0) {
     printf("Failed sending mavlink message");
   }
+}
+
+void GazeboMavlinkInterface::PixyCamPtsCallback( PixyCamPtsPtr& pixyCamPts_message ) {
+    std::cout << "PixyCamPtsCallback" << std::endl;
 }
 
 void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {

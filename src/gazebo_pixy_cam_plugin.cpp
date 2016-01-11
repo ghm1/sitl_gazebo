@@ -87,9 +87,7 @@ void PixyCameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr _sdf)
 
   node_handle_ = transport::NodePtr(new transport::Node());
   node_handle_->Init(namespace_);
- // opticalFlow_pub_ = node_handle_->Advertise<opticalFlow_msgs::msgs::opticalFlow>(topicName, 10);
-
-
+  PixyCamPts_pub_ = node_handle_->Advertise<mav_msgs::msgs::PixyCamPts>(topicName, 10);
 
   this->newFrameConnection = this->camera->ConnectNewImageFrame(
       boost::bind(&PixyCameraPlugin::OnNewFrame, this, _1, this->width, this->height, this->depth, this->format));
@@ -122,6 +120,9 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
   compression_params.push_back(9);
 
+  //bounding rectangle around detected point
+  vector<Rect> boundRect;
+
   //check time
   if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
   {
@@ -134,17 +135,12 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
           //printf(imgName.c_str());
           //printf("\n");
 
-          imwrite(origImgName, frame, compression_params);
+          //imwrite(origImgName, frame, compression_params);
 
           //convert to gray
           cv::Mat imageInputGray;
           cvtColor(frame,imageInputGray,cv::COLOR_BGR2GRAY);
-          imwrite(origImgName, imageInputGray, compression_params);
-
-          //Mat channel[3];
-          // The actual splitting.
-          //split(frame, channel);
-          //imwrite(channelImgName, channel[2], compression_params);
+          //imwrite(origImgName, imageInputGray, compression_params);
 
           //thresholding
           cv::Mat imageThresh;
@@ -156,17 +152,16 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
           //save thesholded image
           imwrite(thresImgName, imageThresh, compression_params);
 
-          //remove noise?
-
           //contourfinder
           std::vector<std::vector<cv::Point>> contours;
           std::vector<cv::Vec4i> hierarchy;
           cv::findContours(imageThresh, contours, hierarchy,
                            cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE);
 
+          //resize bounding rects
+          boundRect.resize(contours.size());
           //find bounding rectangles of contours
           vector<vector<Point> > contours_poly( contours.size() );
-          vector<Rect> boundRect( contours.size() );
           vector<Point2f>center( contours.size() );
           vector<float>radius( contours.size() );
           for( size_t i = 0; i < contours.size(); i++ )
@@ -198,27 +193,21 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
           fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
           return;
       }
+
+      //set point to proto message
+      pixyPts_message.set_count(boundRect.size());
+      std::cout << "new points count" << boundRect.size() << std::endl;
+      for(unsigned i=0; i < boundRect.size(); i++)
+      {
+         gazebo::msgs::Vector2d* newPt =  pixyPts_message.add_pts();
+         Rect rect = boundRect[i];
+         double x = (double)( rect.br().x + rect.tl().x ) / 2;
+         double y = (double)( rect.br().y + rect.tl().y ) / 2;
+         newPt->set_x( x );
+         newPt->set_y( y );
+         std::cout << "newpoint x: " << x << " , y: " << y << std::endl;
+      }
+
+      PixyCamPts_pub_->Publish(pixyPts_message);
   }
-
-
-/*
-  old_gray = frame_gray.clone();
-
-  //std::cout << "pixel flow x = " << pixel_flow_x_integral << "   pixel flow y = " << pixel_flow_y_integral << endl;
-
-  opticalFlow_message.set_time_usec(100000000000000);//big number to prevent timeout in inav
-  opticalFlow_message.set_sensor_id(2.0);
-  opticalFlow_message.set_integration_time_us(dt * 1000000);
-  opticalFlow_message.set_integrated_x(flow_x_ang);
-  opticalFlow_message.set_integrated_y(flow_y_ang);
-  opticalFlow_message.set_integrated_xgyro(0.0); //get real values in gazebo_mavlink_interface.cpp
-  opticalFlow_message.set_integrated_ygyro(0.0); //get real values in gazebo_mavlink_interface.cpp
-  opticalFlow_message.set_integrated_zgyro(0.0); //get real values in gazebo_mavlink_interface.cpp
-  opticalFlow_message.set_temperature(20.0);
-  opticalFlow_message.set_quality(meancount * 255 / maxfeatures); //features?
-  opticalFlow_message.set_time_delta_distance_us(0.0);
-  opticalFlow_message.set_distance(0.0); //get real values in gazebo_mavlink_interface.cpp
-
-  opticalFlow_pub_->Publish(opticalFlow_message); */
-
 }

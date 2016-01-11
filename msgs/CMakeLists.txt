@@ -26,6 +26,7 @@ set (msgs
   CommandTrajectory.proto
   CommandVelocityTrajectory.proto
   MotorSpeed.proto
+  PixyCamPts.proto
 )
 PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${msgs})
 add_library(mav_msgs SHARED ${PROTO_SRCS})

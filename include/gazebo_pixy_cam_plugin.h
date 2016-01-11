@@ -28,7 +28,7 @@
 #include "gazebo/transport/transport.hh"
 #include "gazebo/msgs/msgs.hh"
 
-//#include "opticalFlow.pb.h"
+#include "PixyCamPts.pb.h"
 
 #include <opencv2/opencv.hpp>
 #include <iostream>
@@ -72,11 +72,13 @@ namespace gazebo
 	//Mat old_gray;
 	//Mat frame_gray;
 
-	transport::PublisherPtr opticalFlow_pub_;
+    transport::PublisherPtr PixyCamPts_pub_;
 	transport::NodePtr node_handle_;
 	//opticalFlow_msgs::msgs::opticalFlow opticalFlow_message;
+    mav_msgs::msgs::PixyCamPts pixyPts_message;
+
 	std::string namespace_;
-	const string topicName = "opticalFlow";
+    const string topicName = "PixyCamPts";
 
 	const int maxfeatures = 20;
 	const double qualityLevel = 0.01;

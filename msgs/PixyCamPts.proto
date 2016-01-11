@@ -1,0 +1,9 @@
+syntax = "proto2";
+package mav_msgs.msgs;
+import "vector2d.proto";
+
+message PixyCamPts
+{
+	required int32	count = 1;
+	repeated gazebo.msgs.Vector2d pts = 2;
+}
