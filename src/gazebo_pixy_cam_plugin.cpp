@@ -150,7 +150,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
 //                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
 
           //save thesholded image
-          imwrite(thresImgName, imageThresh, compression_params);
+          //imwrite(thresImgName, imageThresh, compression_params);
 
           //contourfinder
           std::vector<std::vector<cv::Point>> contours;
@@ -183,7 +183,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
           }
 
           //save resulting image
-          imwrite(resultImgName, drawing, compression_params);
+          //imwrite(resultImgName, drawing, compression_params);
 
           imgCounter++;
           //reset timer
@@ -198,7 +198,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
       pixyPts_message.Clear();
       //set point to proto message
       pixyPts_message.set_count(boundRect.size());
-      std::cout << "new points count" << boundRect.size() << std::endl;
+      //std::cout << "new points count" << boundRect.size() << std::endl;
       for(unsigned i=0; i < boundRect.size(); i++)
       {
          gazebo::msgs::Vector2d* newPt =  pixyPts_message.add_pts();
