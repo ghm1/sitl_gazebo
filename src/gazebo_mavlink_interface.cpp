@@ -314,6 +314,7 @@ void GazeboMavlinkInterface::PixyCamPtsCallback( PixyCamPtsPtr& pixyCamPts_messa
         }
 
         //send over mavlink
+        std::cout << "PixyCamPtsCallback sending points: " << ptsSize << std::endl;
         send_mavlink_message(MAVLINK_MSG_ID_PIXY_CAM_PTS, &pixy_msg, 200);
     }
 }
