@@ -124,8 +124,8 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
   vector<Rect> boundRect;
 
   //check time
-  if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
-  {
+//  if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
+//  {
       std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
       std::string origImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
       std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
@@ -213,5 +213,5 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
       }
 
       PixyCamPts_pub_->Publish(pixyPts_message);
-  }
+//  }
 }

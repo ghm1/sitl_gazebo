@@ -314,7 +314,7 @@ void GazeboMavlinkInterface::PixyCamPtsCallback( PixyCamPtsPtr& pixyCamPts_messa
         }
 
         //send over mavlink
-        std::cout << "PixyCamPtsCallback sending points: " << ptsSize << std::endl;
+        //std::cout << "PixyCamPtsCallback sending points: " << ptsSize << std::endl;
         send_mavlink_message(MAVLINK_MSG_ID_PIXY_CAM_PTS, &pixy_msg, 200);
     }
 }
@@ -355,7 +355,7 @@ void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
     sensor_msg.temperature = 0.0;
     sensor_msg.fields_updated = 4095;
 
-    std::cout << "ImuCallback sending.." << std::endl;
+    //std::cout << "ImuCallback sending.." << std::endl;
 
     send_mavlink_message(MAVLINK_MSG_ID_HIL_SENSOR, &sensor_msg, 200);    
   } else{
