@@ -295,10 +295,10 @@ void GazeboMavlinkInterface::send_mavlink_message(const uint8_t msgid, const voi
 }
 
 void GazeboMavlinkInterface::PixyCamPtsCallback( PixyCamPtsPtr& pixyCamPts_message ) {
-    std::cout << "PixyCamPtsCallback" << std::endl;
+    //std::cout << "PixyCamPtsCallback" << std::endl;
 
     int ptsSize = pixyCamPts_message->pts_size();
-    std::cout << "received points: " << ptsSize << std::endl;
+    //std::cout << "received points: " << ptsSize << std::endl;
 
     for( int index = 0; index < ptsSize; index++ )
     {

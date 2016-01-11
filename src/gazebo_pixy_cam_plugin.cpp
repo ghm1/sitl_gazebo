@@ -207,7 +207,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
          double y = (double)( rect.br().y + rect.tl().y ) / 2;
          newPt->set_x( x );
          newPt->set_y( y );
-         std::cout << "newpoint x: " << x << " , y: " << y << std::endl;
+         //std::cout << "newpoint x: " << x << " , y: " << y << std::endl;
       }
 
       PixyCamPts_pub_->Publish(pixyPts_message);
