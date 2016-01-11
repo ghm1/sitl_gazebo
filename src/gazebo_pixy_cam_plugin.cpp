@@ -102,116 +102,122 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
                               unsigned int _depth,
                               const std::string &_format)
 {
-  _image = this->camera->GetImageData(0);
-  //GetHFOV gives fucking gazebo::math::Angle which you can not cast...
-  const double Hfov = 0.91;
-  const double focal_length = (_width/2)/tan(Hfov/2);
+    _image = this->camera->GetImageData(0);
 
-  double rate = this->camera->GetRenderRate();
-  if (!isfinite(rate)) {
-	   rate =  10.0;
-  }
+    //GetHFOV gives fucking gazebo::math::Angle which you can not cast...
+    //const double Hfov = 0.91;
+    //const double focal_length = (_width/2)/tan(Hfov/2);
 
-  Mat frame = Mat(_height, _width, CV_8UC3);
-  //Mat frameBGR = Mat(_height, _width, CV_8UC3);
-  frame.data = (uchar*)_image; //frame is not the right color now -> convert
+    double rate = this->camera->GetRenderRate();
+//    if (!isfinite(rate)) {
+//       rate =  10.0;
+//    }
 
-  vector<int> compression_params;
-  compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
-  compression_params.push_back(9);
+    Mat frame = Mat(_height, _width, CV_8UC3);
+    //Mat frameBGR = Mat(_height, _width, CV_8UC3);
+    frame.data = (uchar*)_image; //frame is not the right color now -> convert
 
-  //bounding rectangle around detected point
-  vector<Rect> boundRect;
+    vector<int> compression_params;
+    compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
+    compression_params.push_back(9);
 
-  //check time
-//  if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
-//  {
-      std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
-      std::string origImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
-      std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
-      std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
-      try {
-          //printf("saving img.. \n");
-          //printf(imgName.c_str());
-          //printf("\n");
+    //bounding rectangle around detected point
+    vector<Rect> boundRect;
 
-          //imwrite(origImgName, frame, compression_params);
+    try {
+        //convert to gray
+        cv::Mat imageInputGray;
+        cvtColor(frame,imageInputGray,cv::COLOR_BGR2GRAY);
 
-          //convert to gray
-          cv::Mat imageInputGray;
-          cvtColor(frame,imageInputGray,cv::COLOR_BGR2GRAY);
-          //imwrite(origImgName, imageInputGray, compression_params);
+        //thresholding
+        cv::Mat imageThresh;
+        double thres = 60;
+        cv::threshold(imageInputGray, imageThresh, thres, 255, cv::THRESH_BINARY_INV);
+        //          cv::adaptiveThreshold(channel[0], imageThresh, 255,
+        //                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
 
-          //thresholding
-          cv::Mat imageThresh;
-          double thres = 60;
-          cv::threshold(imageInputGray, imageThresh, thres, 255, cv::THRESH_BINARY_INV);
-//          cv::adaptiveThreshold(channel[0], imageThresh, 255,
-//                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
+        //contourfinder
+        std::vector<std::vector<cv::Point>> contours;
+        std::vector<cv::Vec4i> hierarchy;
+        cv::findContours(imageThresh, contours, hierarchy,
+                       cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE);
 
-          //save thesholded image
-          //imwrite(thresImgName, imageThresh, compression_params);
+        //resize bounding rects
+        boundRect.resize(contours.size());
+        //find bounding rectangles of contours
+        vector<vector<Point> > contours_poly( contours.size() );
+        vector<Point2f>center( contours.size() );
+        vector<float>radius( contours.size() );
 
-          //contourfinder
-          std::vector<std::vector<cv::Point>> contours;
-          std::vector<cv::Vec4i> hierarchy;
-          cv::findContours(imageThresh, contours, hierarchy,
-                           cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE);
-
-          //resize bounding rects
-          boundRect.resize(contours.size());
-          //find bounding rectangles of contours
-          vector<vector<Point> > contours_poly( contours.size() );
-          vector<Point2f>center( contours.size() );
-          vector<float>radius( contours.size() );
-          for( size_t i = 0; i < contours.size(); i++ )
-          {
+        for( size_t i = 0; i < contours.size(); i++ )
+        {
             approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
             boundRect[i] = boundingRect( Mat(contours_poly[i]) );
             minEnclosingCircle( contours_poly[i], center[i], radius[i] );
-          }
+        }
 
-          //draw rectangles into image
-          RNG rng(12345);
-          Mat drawing = Mat::zeros( imageThresh.size(), CV_8UC3 );
-          for( size_t i = 0; i< contours.size(); i++ )
-          {
-            Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-            //drawContours( drawing, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-            rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
-            //circle( drawing, center[i], (int)radius[i], color, 2, 8, 0 );
-          }
+        //draw rectangles into image
+        RNG rng(12345);
+        Mat drawing = Mat::zeros( imageThresh.size(), CV_8UC3 );
+        for( size_t i = 0; i< contours.size(); i++ )
+        {
+        Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+        //drawContours( drawing, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+        rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
+        //circle( drawing, center[i], (int)radius[i], color, 2, 8, 0 );
+        }
 
-          //save resulting image
-          //imwrite(resultImgName, drawing, compression_params);
+        //save debug images after every 0.5 seconds
+        if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
+        {
+            std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
+            //std::string origImgName = dir + std::string("orig") + to_string(imgCounter) + std::string(".png");
+            //std::string grayImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
+            std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
+            std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
 
-          imgCounter++;
-          //reset timer
-          lastTimeImg = std::clock();
-      }
-      catch (runtime_error& ex) {
-          fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
-          return;
-      }
+            //printf("saving img.. \n");
+            //printf(imgName.c_str());
+            //printf("\n");
 
-      //clear message
-      pixyPts_message.Clear();
-      //set point to proto message
-      pixyPts_message.set_count(boundRect.size());
-      //std::cout << "new points count" << boundRect.size() << std::endl;
-      for(unsigned i=0; i < boundRect.size(); i++)
-      {
-         gazebo::msgs::Vector2d* newPt =  pixyPts_message.add_pts();
-         Rect rect = boundRect[i];
-         double x = (double)( rect.br().x + rect.tl().x ) / 2;
-         double y = (double)( rect.br().y + rect.tl().y ) / 2;
-         newPt->set_x( x );
-         newPt->set_y( y );
-         pixyPts_message.add_width( (float)rect.width );
-         pixyPts_message.add_height( (float)rect.height );
-         //std::cout << "newpoint x: " << x << " , y: " << y << std::endl;
-      }
+            //original image
+            //imwrite(origImgName, frame, compression_params);
+            //grayimage
+            //imwrite(grayImgName, imageInputGray, compression_params);
 
-      PixyCamPts_pub_->Publish(pixyPts_message);
-//  }
+            //save thesholded image
+            imwrite(thresImgName, imageThresh, compression_params);
+            //save resulting image
+            imwrite(resultImgName, drawing, compression_params);
+
+            imgCounter++;
+            //reset timer
+            lastTimeImg = std::clock();
+        }
+    }
+    catch (runtime_error& ex) {
+        fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
+        return;
+    }
+
+    //clear message
+    pixyPts_message.Clear();
+    //set point to proto message
+    pixyPts_message.set_count(boundRect.size());
+    //std::cout << "new points count" << boundRect.size() << std::endl;
+    for(unsigned i=0; i < boundRect.size(); i++)
+    {
+        gazebo::msgs::Vector2d* newPt =  pixyPts_message.add_pts();
+        Rect rect = boundRect[i];
+        double x = (double)( rect.br().x + rect.tl().x ) / 2;
+        double y = (double)( rect.br().y + rect.tl().y ) / 2;
+        newPt->set_x( x );
+        newPt->set_y( y );
+        pixyPts_message.add_width( (float)rect.width );
+        pixyPts_message.add_height( (float)rect.height );
+        //std::cout << "newpoint x: " << x << " , y: " << y << std::endl;
+    }
+
+    PixyCamPts_pub_->Publish(pixyPts_message);
+
 }
