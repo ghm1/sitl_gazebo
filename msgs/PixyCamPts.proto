@@ -6,4 +6,6 @@ message PixyCamPts
 {
 	required int32	count = 1;
 	repeated gazebo.msgs.Vector2d pts = 2;
+	repeated float width = 3;
+	repeated float height = 4;
 }

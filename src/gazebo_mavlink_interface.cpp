@@ -295,20 +295,27 @@ void GazeboMavlinkInterface::send_mavlink_message(const uint8_t msgid, const voi
 }
 
 void GazeboMavlinkInterface::PixyCamPtsCallback( PixyCamPtsPtr& pixyCamPts_message ) {
-    //std::cout << "PixyCamPtsCallback" << std::endl;
+    if(use_mavlink_udp){
+        //std::cout << "PixyCamPtsCallback received points: " << ptsSize << std::endl;
 
-    int ptsSize = pixyCamPts_message->pts_size();
-    //std::cout << "received points: " << ptsSize << std::endl;
+        int ptsSize = pixyCamPts_message->pts_size();
+        //put received message into mavlink structure
+        mavlink_pixy_cam_pts_t pixy_msg;
+        pixy_msg.count = ptsSize;
 
-    for( int index = 0; index < ptsSize; index++ )
-    {
-        gazebo::msgs::Vector2d ptRef = pixyCamPts_message->pts(index);
-        std::cout << "x: " << ptRef.x() << " y: " << ptRef.y() << std::endl;
+        for( int index = 0; index < ptsSize; index++ )
+        {
+            gazebo::msgs::Vector2d ptRef = pixyCamPts_message->pts(index);
+            //std::cout << "x: " << ptRef.x() << " y: " << ptRef.y() << std::endl;
+            pixy_msg.x[index] = ptRef.x();
+            pixy_msg.y[index] = ptRef.y();
+            pixy_msg.width[index] = pixyCamPts_message->width(index);
+            pixy_msg.height[index] = pixyCamPts_message->height(index);
+        }
+
+        //send over mavlink
+        send_mavlink_message(MAVLINK_MSG_ID_PIXY_CAM_PTS, &pixy_msg, 200);
     }
-
-    //put received message into mavlink structure
-    mavlink_pixy_cam_pts_t pixy_msg;
-
 }
 
 void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
