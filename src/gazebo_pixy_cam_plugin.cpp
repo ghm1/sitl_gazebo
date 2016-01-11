@@ -194,6 +194,8 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
           return;
       }
 
+      //clear message
+      pixyPts_message.Clear();
       //set point to proto message
       pixyPts_message.set_count(boundRect.size());
       std::cout << "new points count" << boundRect.size() << std::endl;
