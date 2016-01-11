@@ -355,6 +355,8 @@ void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
     sensor_msg.temperature = 0.0;
     sensor_msg.fields_updated = 4095;
 
+    std::cout << "ImuCallback sending.." << std::endl;
+
     send_mavlink_message(MAVLINK_MSG_ID_HIL_SENSOR, &sensor_msg, 200);    
   } else{
     hil_sensor_msg_.set_time_usec(world_->GetSimTime().nsec*1000);
