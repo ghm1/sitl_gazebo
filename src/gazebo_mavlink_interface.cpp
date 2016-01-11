@@ -305,6 +305,10 @@ void GazeboMavlinkInterface::PixyCamPtsCallback( PixyCamPtsPtr& pixyCamPts_messa
         gazebo::msgs::Vector2d ptRef = pixyCamPts_message->pts(index);
         std::cout << "x: " << ptRef.x() << " y: " << ptRef.y() << std::endl;
     }
+
+    //put received message into mavlink structure
+    mavlink_pixy_cam_pts_t pixy_msg;
+
 }
 
 void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
