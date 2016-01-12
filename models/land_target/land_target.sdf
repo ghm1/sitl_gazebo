@@ -2,27 +2,27 @@
 <sdf version="1.4">
 <model name="land_target">
   <!-- <pose>1 -2 0.5 0 0 -1.57</pose> -->
-  <pose>1 0 0 0 0 0</pose>
+  <pose>0 0 0 0 0 -1.57</pose>
   <static>true</static>
     <link name="link">
 
       <collision name="collision">
         <geometry>
           <box>
-            <size>0.82 0.55 1.00</size>
+            <size>0.82 0.55 0.001</size>
           </box>
         </geometry>
       </collision>
       <visual name="visual">
         <geometry>
           <box>
-            <size>0.82 0.55 1.00</size>
+            <size>0.82 0.55 0.001</size>
           </box>
         </geometry>
       </visual> 
 
       <visual name='middle_pt_visual'>
-        <pose frame=''>0 0 1 0 -0 0</pose>
+        <pose frame=''>0 0 0.001 0 -0 0</pose>
         <geometry>
           <cylinder>
             <radius>0.04</radius>
@@ -46,7 +46,7 @@
       </visual>
 
       <visual name='right_pt_visual'>
-        <pose frame=''>0.25 0 1 0 -0 0</pose>
+        <pose frame=''>0.25 0 0.001 0 -0 0</pose>
         <geometry>
           <cylinder>
             <radius>0.04</radius>
@@ -70,7 +70,7 @@
       </visual>
 
       <visual name='left_pt_visual'>
-        <pose frame=''>-0.25 0 1 0 -0 0</pose>
+        <pose frame=''>-0.25 0 0.001 0 -0 0</pose>
         <geometry>
           <cylinder>
             <radius>0.04</radius>
@@ -94,7 +94,7 @@
       </visual>
 
       <visual name='front_pt_visual'>
-        <pose frame=''>0 0.25 1 0 -0 0</pose>
+        <pose frame=''>0 0.25 0.001 0 -0 0</pose>
         <geometry>
           <cylinder>
             <radius>0.04</radius>
