@@ -1,6 +1,6 @@
 // MESSAGE PIXY_CAM_PTS PACKING
 
-#define MAVLINK_MSG_ID_PIXY_CAM_PTS 180
+#define MAVLINK_MSG_ID_PIXY_CAM_PTS 160
 
 typedef struct __mavlink_pixy_cam_pts_t
 {
@@ -13,10 +13,10 @@ typedef struct __mavlink_pixy_cam_pts_t
 } mavlink_pixy_cam_pts_t;
 
 #define MAVLINK_MSG_ID_PIXY_CAM_PTS_LEN 80
-#define MAVLINK_MSG_ID_180_LEN 80
+#define MAVLINK_MSG_ID_160_LEN 80
 
 #define MAVLINK_MSG_ID_PIXY_CAM_PTS_CRC 222
-#define MAVLINK_MSG_ID_180_CRC 222
+#define MAVLINK_MSG_ID_160_CRC 222
 
 #define MAVLINK_MSG_PIXY_CAM_PTS_FIELD_X_LEN 4
 #define MAVLINK_MSG_PIXY_CAM_PTS_FIELD_Y_LEN 4

@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_home_position_t
 {
- int32_t latitude; /*< Latitude (WGS84), in degrees * 1E7*/
- int32_t longitude; /*< Longitude (WGS84, in degrees * 1E7*/
- int32_t altitude; /*< Altitude (AMSL), in meters * 1000 (positive for up)*/
+ float latitude; /*< Latitude (WGS84), in degrees * 1E7*/
+ float longitude; /*< Longitude (WGS84, in degrees * 1E7*/
+ float altitude; /*< Altitude (AMSL), in meters * 1000 (positive for up)*/
  float x; /*< Local X position of this position in the local coordinate frame*/
  float y; /*< Local Y position of this position in the local coordinate frame*/
  float z; /*< Local Z position of this position in the local coordinate frame*/
@@ -19,17 +19,17 @@ typedef struct __mavlink_home_position_t
 #define MAVLINK_MSG_ID_HOME_POSITION_LEN 52
 #define MAVLINK_MSG_ID_242_LEN 52
 
-#define MAVLINK_MSG_ID_HOME_POSITION_CRC 104
-#define MAVLINK_MSG_ID_242_CRC 104
+#define MAVLINK_MSG_ID_HOME_POSITION_CRC 169
+#define MAVLINK_MSG_ID_242_CRC 169
 
 #define MAVLINK_MSG_HOME_POSITION_FIELD_Q_LEN 4
 
 #define MAVLINK_MESSAGE_INFO_HOME_POSITION { \
 	"HOME_POSITION", \
 	10, \
-	{  { "latitude", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_home_position_t, latitude) }, \
-         { "longitude", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_home_position_t, longitude) }, \
-         { "altitude", NULL, MAVLINK_TYPE_INT32_T, 0, 8, offsetof(mavlink_home_position_t, altitude) }, \
+	{  { "latitude", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_home_position_t, latitude) }, \
+         { "longitude", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_home_position_t, longitude) }, \
+         { "altitude", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_home_position_t, altitude) }, \
          { "x", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_home_position_t, x) }, \
          { "y", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_home_position_t, y) }, \
          { "z", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_home_position_t, z) }, \
@@ -60,13 +60,13 @@ typedef struct __mavlink_home_position_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_home_position_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       int32_t latitude, int32_t longitude, int32_t altitude, float x, float y, float z, const float *q, float approach_x, float approach_y, float approach_z)
+						       float latitude, float longitude, float altitude, float x, float y, float z, const float *q, float approach_x, float approach_y, float approach_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[MAVLINK_MSG_ID_HOME_POSITION_LEN];
-	_mav_put_int32_t(buf, 0, latitude);
-	_mav_put_int32_t(buf, 4, longitude);
-	_mav_put_int32_t(buf, 8, altitude);
+	_mav_put_float(buf, 0, latitude);
+	_mav_put_float(buf, 4, longitude);
+	_mav_put_float(buf, 8, altitude);
 	_mav_put_float(buf, 12, x);
 	_mav_put_float(buf, 16, y);
 	_mav_put_float(buf, 20, z);
@@ -118,13 +118,13 @@ static inline uint16_t mavlink_msg_home_position_pack(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_home_position_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           int32_t latitude,int32_t longitude,int32_t altitude,float x,float y,float z,const float *q,float approach_x,float approach_y,float approach_z)
+						           float latitude,float longitude,float altitude,float x,float y,float z,const float *q,float approach_x,float approach_y,float approach_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[MAVLINK_MSG_ID_HOME_POSITION_LEN];
-	_mav_put_int32_t(buf, 0, latitude);
-	_mav_put_int32_t(buf, 4, longitude);
-	_mav_put_int32_t(buf, 8, altitude);
+	_mav_put_float(buf, 0, latitude);
+	_mav_put_float(buf, 4, longitude);
+	_mav_put_float(buf, 8, altitude);
 	_mav_put_float(buf, 12, x);
 	_mav_put_float(buf, 16, y);
 	_mav_put_float(buf, 20, z);
@@ -200,13 +200,13 @@ static inline uint16_t mavlink_msg_home_position_encode_chan(uint8_t system_id, 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_home_position_send(mavlink_channel_t chan, int32_t latitude, int32_t longitude, int32_t altitude, float x, float y, float z, const float *q, float approach_x, float approach_y, float approach_z)
+static inline void mavlink_msg_home_position_send(mavlink_channel_t chan, float latitude, float longitude, float altitude, float x, float y, float z, const float *q, float approach_x, float approach_y, float approach_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[MAVLINK_MSG_ID_HOME_POSITION_LEN];
-	_mav_put_int32_t(buf, 0, latitude);
-	_mav_put_int32_t(buf, 4, longitude);
-	_mav_put_int32_t(buf, 8, altitude);
+	_mav_put_float(buf, 0, latitude);
+	_mav_put_float(buf, 4, longitude);
+	_mav_put_float(buf, 8, altitude);
 	_mav_put_float(buf, 12, x);
 	_mav_put_float(buf, 16, y);
 	_mav_put_float(buf, 20, z);
@@ -247,13 +247,13 @@ static inline void mavlink_msg_home_position_send(mavlink_channel_t chan, int32_
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_home_position_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int32_t latitude, int32_t longitude, int32_t altitude, float x, float y, float z, const float *q, float approach_x, float approach_y, float approach_z)
+static inline void mavlink_msg_home_position_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float latitude, float longitude, float altitude, float x, float y, float z, const float *q, float approach_x, float approach_y, float approach_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char *buf = (char *)msgbuf;
-	_mav_put_int32_t(buf, 0, latitude);
-	_mav_put_int32_t(buf, 4, longitude);
-	_mav_put_int32_t(buf, 8, altitude);
+	_mav_put_float(buf, 0, latitude);
+	_mav_put_float(buf, 4, longitude);
+	_mav_put_float(buf, 8, altitude);
 	_mav_put_float(buf, 12, x);
 	_mav_put_float(buf, 16, y);
 	_mav_put_float(buf, 20, z);
@@ -297,9 +297,9 @@ static inline void mavlink_msg_home_position_send_buf(mavlink_message_t *msgbuf,
  *
  * @return Latitude (WGS84), in degrees * 1E7
  */
-static inline int32_t mavlink_msg_home_position_get_latitude(const mavlink_message_t* msg)
+static inline float mavlink_msg_home_position_get_latitude(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  0);
+	return _MAV_RETURN_float(msg,  0);
 }
 
 /**
@@ -307,9 +307,9 @@ static inline int32_t mavlink_msg_home_position_get_latitude(const mavlink_messa
  *
  * @return Longitude (WGS84, in degrees * 1E7
  */
-static inline int32_t mavlink_msg_home_position_get_longitude(const mavlink_message_t* msg)
+static inline float mavlink_msg_home_position_get_longitude(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  4);
+	return _MAV_RETURN_float(msg,  4);
 }
 
 /**
@@ -317,9 +317,9 @@ static inline int32_t mavlink_msg_home_position_get_longitude(const mavlink_mess
  *
  * @return Altitude (AMSL), in meters * 1000 (positive for up)
  */
-static inline int32_t mavlink_msg_home_position_get_altitude(const mavlink_message_t* msg)
+static inline float mavlink_msg_home_position_get_altitude(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  8);
+	return _MAV_RETURN_float(msg,  8);
 }
 
 /**
