@@ -131,8 +131,7 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
 
         //thresholding
         cv::Mat imageThresh;
-        //double thres = 60;
-        double thres = 100;
+        double thres = 60;
         cv::threshold(imageInputGray, imageThresh, thres, 255, cv::THRESH_BINARY_INV);
         //          cv::adaptiveThreshold(channel[0], imageThresh, 255,
         //                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
