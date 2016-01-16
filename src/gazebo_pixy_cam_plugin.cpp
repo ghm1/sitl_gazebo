@@ -131,7 +131,8 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
 
         //thresholding
         cv::Mat imageThresh;
-        double thres = 60;
+        //double thres = 60;
+        double thres = 40;
         cv::threshold(imageInputGray, imageThresh, thres, 255, cv::THRESH_BINARY_INV);
         //          cv::adaptiveThreshold(channel[0], imageThresh, 255,
         //                  cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY_INV, 100, 0 );
@@ -171,8 +172,8 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
         if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
         {
             std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
-            //std::string origImgName = dir + std::string("orig") + to_string(imgCounter) + std::string(".png");
-            //std::string grayImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
+            std::string origImgName = dir + std::string("orig") + to_string(imgCounter) + std::string(".png");
+            std::string grayImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
             std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
             std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
 
@@ -181,9 +182,9 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
             //printf("\n");
 
             //original image
-            //imwrite(origImgName, frame, compression_params);
+            imwrite(origImgName, frame, compression_params);
             //grayimage
-            //imwrite(grayImgName, imageInputGray, compression_params);
+            imwrite(grayImgName, imageInputGray, compression_params);
 
             //save thesholded image
             imwrite(thresImgName, imageThresh, compression_params);
