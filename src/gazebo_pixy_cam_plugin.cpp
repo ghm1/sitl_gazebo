@@ -167,33 +167,33 @@ void PixyCameraPlugin::OnNewFrame(const unsigned char * _image,
         //circle( drawing, center[i], (int)radius[i], color, 2, 8, 0 );
         }
 
-//        //save debug images after every 0.5 seconds
-//        if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
-//        {
-//            std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
-//            //std::string origImgName = dir + std::string("orig") + to_string(imgCounter) + std::string(".png");
-//            std::string grayImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
-//            std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
-//            std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
+        //save debug images after every 0.5 seconds
+        if( (std::clock() - lastTimeImg) / (double) CLOCKS_PER_SEC > 0.5 )
+        {
+            std::string dir = std::string("/home/michael/sourcecode/quadcopter/Firmware-ghm1/Tools/sitl_gazebo/images/");
+            //std::string origImgName = dir + std::string("orig") + to_string(imgCounter) + std::string(".png");
+            std::string grayImgName = dir + std::string("gray") + to_string(imgCounter) + std::string(".png");
+            //std::string thresImgName = dir + std::string("thres") + to_string(imgCounter) + std::string(".png");
+            std::string resultImgName = dir + std::string("result") + to_string(imgCounter) + std::string(".png");
 
-//            //printf("saving img.. \n");
-//            //printf(imgName.c_str());
-//            //printf("\n");
+            //printf("saving img.. \n");
+            //printf(imgName.c_str());
+            //printf("\n");
 
-//            //original image
-//            //imwrite(origImgName, frame, compression_params);
-//            //grayimage
-//            imwrite(grayImgName, imageInputGray, compression_params);
+            //original image
+            //imwrite(origImgName, frame, compression_params);
+            //grayimage
+            imwrite(grayImgName, imageInputGray, compression_params);
 
-//            //save thesholded image
-//            imwrite(thresImgName, imageThresh, compression_params);
-//            //save resulting image
-//            imwrite(resultImgName, drawing, compression_params);
+            //save thesholded image
+            //imwrite(thresImgName, imageThresh, compression_params);
+            //save resulting image
+            imwrite(resultImgName, drawing, compression_params);
 
-//            imgCounter++;
-//            //reset timer
-//            lastTimeImg = std::clock();
-//        }
+            imgCounter++;
+            //reset timer
+            lastTimeImg = std::clock();
+        }
     }
     catch (runtime_error& ex) {
         fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
